@@ -15,13 +15,10 @@ struct BTree {
   BTree<T>* left;
   BTree<T>* right;
   /* Constructors and destructor */
-  BTree();
   BTree(const T& data);
+  BTree(const BTree& other);
+  BTree(BTree&& other);
   ~BTree();
-  /* Printing traversals */
-  void print_inorder(std::function<std::string(T)>& print = nullptr);
-  void print_postorder();
-  void print_preorder();
   /* Build methods */
   static BTree<T>* build_util(const std::vector<T>& in, const std::vector<T>& post, int in_start, int in_end, int post_start, int post_end);
   static BTree<T>* build_tree(const std::vector<T>& in, const std::vector<T>& post);
@@ -32,8 +29,17 @@ struct BTree {
 template <typename T>
 BTree<T>::BTree(const T& data): data(data), left(nullptr), right(nullptr) {}
 
+
 template <typename T>
-BTree<T>::BTree(): BTree(0) {}
+BTree<T>::BTree(const BTree<T>& other): data(other.data), left(nullptr), right(nullptr)  {
+  if (other.left) left = new BTree<T>(*other.left);
+  if (other.right) right = new BTree<T>(*other.right);
+}
+
+
+template <typename T>
+BTree<T>::BTree(BTree&& other): data(std::move(data)), left(other.left), right(other.right) {}
+
 
 template <typename T>
 BTree<T>::~BTree() {
@@ -69,27 +75,6 @@ BTree<T>* BTree<T>::build_tree(const std::vector<T>& in, const std::vector<T>& p
   if(in_size != post_size) return nullptr;
 
   return build_util(in, post, 0, in_size, 0, post_size);
-}
-
-template <typename T>
-void BTree<T>::print_inorder(std::function<std::string(T)>& print /*= {}*/) {
-  if(left) left->print_inorder(print);
-  if(print) std::cout << print(data);
-  if(right) right->print_inorder(print);
-}
-
-template <typename T>
-void BTree<T>::print_postorder() {
-  if(left) left->print_postorder();
-  if(right) right->print_postorder();
-  std::cout << data;
-}
-
-template <typename T>
-void BTree<T>::print_preorder() {
-  std::cout << data;
-  if(left) left->print_preorder();
-  if(right) right->print_preorder();
 }
 
 #endif
