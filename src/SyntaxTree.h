@@ -8,34 +8,34 @@
 #include <string>
 #include <utility>
 
-class SyntaxTree {
+class SyntaxTree: protected BTree<Token*> {
   private:
-    /* ----- DATA MEMBERS ----- */
-    // Pointer to a binary tree of tokens that represent the syntactic structure of an expression
-    BTree<Token*>* m_stree;
-    // Reuslt obtained 
     Operand m_result;
-    /* ----- PRIVATE RECURSIVE METHODS ----- */
-    BTree<Token*>* copy_tree(BTree<Token*>* other);
-    BTree<Token*>* parse_string(std::string str);
-    Operand parse_tree(BTree<Token*>* tree);
-    /* ----- PRIVATE NON-RECURSIVE METHODS ----- */
-    /*  Finds index of a given substring OUTSIDE any paretheses in the given string
-     *  Returns index if found; otherwise, returns std::string::npos;
-     */
-    int find_substr_util(std::string str, std::string substr);
-    /* Finds wheter a string is wrapped by parentheses 
-     * Receives validated string
-     */
-    bool is_wrapped(std::string str);
-    /* Throws errors for unacceptable strings */
-    bool validate_str(std::string str);
   public:
     SyntaxTree(std::string str);
     SyntaxTree(const SyntaxTree& other);
     SyntaxTree(SyntaxTree&& other);
-    ~SyntaxTree();
     inline Operand result() const { return m_result; }
+
+  private:
+    /* ----- PRIVATE UTILITY METHODS ----- */
+
+    /* Traverses tree recursively in post order to obtain its result
+     * Called during instantiation
+     */
+    Operand parse();
+    /*  Finds index of a given substring OUTSIDE any paretheses in the given string
+     *  Returns index if found; otherwise, returns std::string::npos;
+     */
+    int find_operand(std::string str, std::string opstr);
+    /* Finds whether a string is wrapped by parentheses 
+     * Receives validated string
+     */
+    bool is_wrapped(std::string str);
+    /*   Throws errors for unacceptable strings:
+     * - Unmatched parentheses
+     */
+    bool validate_str(std::string str);
 };
 
 

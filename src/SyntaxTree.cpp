@@ -1,82 +1,50 @@
 #include "SyntaxTree.h"
 #include <exception>
 
-
-SyntaxTree::SyntaxTree(std::string str) {
-  m_stree = parse_string(str);
-  m_result = parse_tree(m_stree);
-}
-
-SyntaxTree::SyntaxTree(const SyntaxTree& other) {
-  m_stree = copy_tree(other.m_stree);
-  m_result = parse_tree(m_stree);
-}
-
-SyntaxTree::SyntaxTree(SyntaxTree&& other) {
-  // Initialize new object
-  m_stree = other.m_stree;
-  m_result = parse_tree(m_stree);
-  // Free old ebject
-  other.m_stree = nullptr;
-}
-
-SyntaxTree::~SyntaxTree() { if(m_stree) delete m_stree; }
-
-
-BTree<Token*>* SyntaxTree::copy_tree(BTree<Token*>* other) {
-  if (!other) return nullptr;
-  
-  // Allocate memory for new node
-  BTree<Token*>* new_tree = new BTree<Token*>(*other);
-
-  // Copy left and right subtree recursively
-  new_tree->left = copy_tree(other->left);
-  new_tree->left = copy_tree(other->right);
-
-  return new_tree;
-}
-
-
-BTree<Token*>* SyntaxTree::parse_string(std::string str) {
+SyntaxTree::SyntaxTree(std::string str): BTree(NULL), m_result(0) {
   // Validate input
   validate_str(str);
-  // Check if string is wrapped by a pair of parentheses
-  if (is_wrapped(str)) {
-    // Generate tree recursively for subexpression
-    return parse_string(str.substr(1, str.size()-2));
-  }
-  // Check if str contains operator. Traverse in increasing priority
-  for(auto& pair : Operator::map) {
-    int index = find_substr_util(str, pair.second.str());
+  // Check if string is wrapped by a pair of parentheses; remove them if affirmative
+  if (is_wrapped(str)) str = str.substr(1, str.size()-2);
+  // Check if str contains operator; traverse operators in increasing priority
+  bool is_operator = false;
+  for(auto& op : Operator::set) {
+    int index = find_operand(str, op.str());
     if (index != std::string::npos) { // If operator was found
+      is_operator = true;
       // Create tree node containg the op
-      BTree<Token*>* tree = new BTree<Token*>(new Operator(pair.second));
-      tree->left = parse_string(str.substr(0,index));
-      tree->right = parse_string(str.substr(index+1,str.size()-index-1));
-      return tree;
+      data = new Operator(op);
+      left = new SyntaxTree(str.substr(0,index));
+      right = new SyntaxTree(str.substr(index+1,str.size()-index-1));
+      break;
     }
   }
   // If no operator was found, create tree node as operand
-  return new BTree<Token*>(new Operand(str));
+  if(!is_operator) data = new Operand(str);
+  // Parse tree
+  parse();
 }
 
 
-Operand SyntaxTree::parse_tree(BTree<Token*>* tree) {
+SyntaxTree::SyntaxTree(const SyntaxTree& other): BTree<Token*>(other), m_result(other.m_result) {}
+
+SyntaxTree::SyntaxTree(SyntaxTree&& other): BTree<Token*>(std::move(other)), m_result(std::move(m_result)) {}
+
+
+Operand SyntaxTree::parse() {
   // Base case: operand node
-  if (auto operand = dynamic_cast<Operand*>(tree->data))
-    return *operand;
+  if (auto operand = dynamic_cast<Operand*>(data)) 
+    return m_result = *operand;
   
-  // Recursive calculation
-  auto n1 = parse_tree(tree->left);
-  auto n2 = parse_tree(tree->right);
-  auto op = *dynamic_cast<Operator*>(tree->data);
+  auto l_tree = static_cast<SyntaxTree*>(left);
+  auto r_tree = static_cast<SyntaxTree*>(right);
+  auto op = *static_cast<Operator*>(data);
 
-  // Result
-  return op(n1,n2);
+  return m_result = op(l_tree->result().value(),r_tree->result().value());
 }
 
 
-int SyntaxTree::find_substr_util(std::string str, std::string substr) {
+int SyntaxTree::find_operand(std::string str, std::string opstr) {
   //Track number of opened/closed parentheses while traversing the string
   int nested_pars = 0;
   for (int i = 0; i != str.size(); ++i) {
@@ -86,8 +54,8 @@ int SyntaxTree::find_substr_util(std::string str, std::string substr) {
     // Search string only if outside any parentheses
     if(nested_pars == 0) {
       bool found = true;
-      for (int j = 0; j != substr.size(); ++j) {
-        if(substr[j] != str[i+j]) {
+      for (int j = 0; j != opstr.size(); ++j) {
+        if(opstr[j] != str[i+j]) {
           found = false;
           break;
         }
