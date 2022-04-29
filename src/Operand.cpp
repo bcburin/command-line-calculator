@@ -1,6 +1,9 @@
 #include "Operand.h"
 #include <execution>
 
+Operand::Operand(): Operand(0) {}
+
+
 Operand::Operand(std::string str): Token(str) {
   try { m_value = std::stod(str); }
   catch(...) { throw std::invalid_argument("Operand not conversible to double."); }
