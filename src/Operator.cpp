@@ -1,10 +1,10 @@
 #include "Operator.h"
 
-std::map<int, Operator> Operator::map = {
-  {0, Operator("+", 0, [](double x, double y){ return x+y; })},
-  {1, Operator("-", 1, [](double x, double y){ return x-y; })},
-  {2, Operator("*", 2, [](double x, double y){ return x*y; })},
-  {3, Operator("/", 3, [](double x, double y){ return x/y; })}
+std::set<Operator> Operator::set = {
+  {Operator("+", 0, [](double x, double y){ return x+y; })},
+  {Operator("-", 1, [](double x, double y){ return x-y; })},
+  {Operator("*", 2, [](double x, double y){ return x*y; })},
+  {Operator("/", 3, [](double x, double y){ return x/y; })}
 };
 
 
@@ -33,7 +33,7 @@ Operator Operator::operator=(const Operator&& other) { return Operator(other); }
 
 bool Operator::operator==(const Operator& other) { return str() == other.str() && priority() == other.priority(); }
 bool Operator::operator!=(const Operator& other) { return !(*this == other); }
-bool Operator::operator<(const Operator& other) { return priority() < other.priority(); }
+// bool Operator::operator<(const Operator& other) { return priority() < other.priority(); }
 bool Operator::operator>(const Operator& other) { return priority() > other.priority(); }
 bool Operator::operator<=(const Operator& other) { return *this < other || *this == other; }
 bool Operator::operator>=(const Operator& other) { return *this > other || *this == other; }
@@ -42,3 +42,6 @@ bool Operator::operator>=(const Operator& other) { return *this > other || *this
 Operand Operator::operator()(const Operand& operand1, const Operand& operand2) {
   return Operand(m_apply(operand1.value(), operand2.value()));
 }
+
+
+bool operator<(const Operator& op1, const Operator& op2) { return op1.priority() < op2.priority(); }
