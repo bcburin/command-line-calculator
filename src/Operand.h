@@ -8,7 +8,7 @@ class Operand: public Token {
   private:
     double m_value;
   public:
-    Operand();
+    // Operand();
     Operand(std::string str);
     Operand(double value);
     inline double value() const { return m_value; }

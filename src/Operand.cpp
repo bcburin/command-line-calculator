@@ -1,7 +1,7 @@
 #include "Operand.h"
 #include <execution>
 
-Operand::Operand(): Operand(0) {}
+// Operand::Operand(): Operand(0) {}
 
 
 Operand::Operand(std::string str): Token(str) {
