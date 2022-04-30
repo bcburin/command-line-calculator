@@ -46,6 +46,14 @@ Operand* Variable::clone() const  { return new Variable(*this); }
 
 std::unordered_map<std::string, Operand*> Variable::storage = {};
 
+void Variable::empty_storage() { storage.clear(); }
+
+void Variable::add(std::string name, double value) {
+  Double val(value);
+  Variable var(name);
+  var.set(&val);
+}
+
 
 /*  OVERLOADED OPERATORS FOR OPERANDS */
 

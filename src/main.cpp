@@ -7,19 +7,12 @@
 
 using namespace std;
 
-// function<string(Token*)> print_token = [](Token* token) { return token->str() + "  "; };
 
 int main(int argc, char **argv) {
 
-  // SyntaxTree stree(argv[1]);
-
-  // cout << stree.result()->value();
-
   string input;
 
-  Double pi(3.14);
-  Variable var_pi("PI");
-  var_pi.set(&pi);
+  Variable::add("PI", 3.1415);
 
   while(true) { 
     bool show_output = true;

@@ -41,6 +41,10 @@ class Variable: public Operand {
     inline std::string name() const { return str(); }
     /* Clones object */
     Operand* clone() const override;
+    /* Empties static storage */
+    static void empty_storage();
+    /* Adds a variable to the storage at compile-time */
+    static void add(std::string name, double value);
   private:
     /* Stores variable values */
     static std::unordered_map<std::string, Operand*> storage;
