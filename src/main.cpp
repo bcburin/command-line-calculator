@@ -17,15 +17,25 @@ int main(int argc, char **argv) {
 
   string input;
 
-  while(true) { 
-    cout << ">> ";
-    cin >> input;
+  Double pi(3.14);
+  Variable var_pi("PI");
+  var_pi.set(&pi);
 
+  while(true) { 
+    bool show_output = true;
+    cout << ">> ";
+    std::getline(std::cin, input);
+
+    if(input.back() == ';') {
+      input = input.substr(0, input.size()-1);
+      show_output = false;
+    }
 
     if(input == "exit()") break;
 
     SyntaxTree stree(input);
-    cout << "   " <<  stree.result()->value() << endl;
+
+    if(show_output) cout << "   " <<  stree.result()->value() << endl;
 
   }
 
