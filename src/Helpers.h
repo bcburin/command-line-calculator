@@ -2,6 +2,7 @@
 #define HELPERS_H
 
 #include <vector>
+#include <string>
 
 /* Find index of a given element in vector;
  * Equality must be defined for type T 
@@ -13,6 +14,9 @@ int find_in_vector(const std::vector<T>& vec, const T& key);
 // Find index within specified range [start,end)
 template<typename T>
 int find_in_vector_range(const std::vector<T>& vec, const T& key, int start, int end);
+
+/* Trims whitespace at end and start of string */
+std::string trim(std::string str);
 
 
 /* TEMPLATE FUNCTION DEFINITIONS */
@@ -30,6 +34,5 @@ int find_in_vector_range(const T& key, const std::vector<T>& vec, int start, int
   // Key not found
   return -1;
 }
-
 
 #endif

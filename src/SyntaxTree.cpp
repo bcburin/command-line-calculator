@@ -2,10 +2,12 @@
 #include <exception>
 
 SyntaxTree::SyntaxTree(std::string str): BTree(NULL), m_result(0) {
+  // Trim string
+  str = trim(str);
   // Validate input
   validate_str(str);
-  // Check if string is wrapped by a pair of parentheses; remove them if affirmative
-  if (is_wrapped(str)) str = str.substr(1, str.size()-2);
+  // Check if string is wrapped by a pair of parentheses; remove them if affirmative; repeat until not wrapped
+  while (is_wrapped(str)) str = str.substr(1, str.size()-2);
   // Check if str contains operator; traverse operators in increasing priority
   bool is_operator = false;
   for(auto& op : Operator::set) {
