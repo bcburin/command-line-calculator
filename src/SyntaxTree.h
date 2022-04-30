@@ -10,12 +10,13 @@
 
 class SyntaxTree: protected BTree<Token*> {
   private:
-    Operand m_result;
+    Operand* m_result;
   public:
     SyntaxTree(std::string str);
     SyntaxTree(const SyntaxTree& other);
     SyntaxTree(SyntaxTree&& other);
-    inline Operand result() const { return m_result; }
+    ~SyntaxTree();
+    inline Operand* result() const { return m_result; }
 
   private:
     /* ----- PRIVATE UTILITY METHODS ----- */
@@ -23,7 +24,7 @@ class SyntaxTree: protected BTree<Token*> {
     /* Traverses tree recursively in post order to obtain its result
      * Called during instantiation
      */
-    Operand parse();
+    Operand* parse();
     /*  Finds index of a given substring OUTSIDE any paretheses in the given string
      *  Returns index if found; otherwise, returns std::string::npos;
      */
@@ -35,7 +36,7 @@ class SyntaxTree: protected BTree<Token*> {
     /*   Throws errors for unacceptable strings:
      * - Unmatched parentheses
      */
-    bool validate_str(std::string str);
+    void validate_str(std::string str);
 };
 
 

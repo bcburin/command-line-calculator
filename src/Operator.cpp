@@ -1,21 +1,24 @@
 #include "Operator.h"
 
 std::set<Operator> Operator::set = {
-  {Operator("+", 0, [](double x, double y){ return x+y; })},
-  {Operator("-", 1, [](double x, double y){ return x-y; })},
-  {Operator("*", 2, [](double x, double y){ return x*y; })},
-  {Operator("/", 3, [](double x, double y){ return x/y; })}
+  Operator("+", 8, [](const Operand* x, const Operand* y){ return new Double(x->value()+y->value()); }),
+  Operator("-", 16, [](const Operand* x, const Operand* y){ return new Double(x->value()-y->value()); }),
+  Operator("*", 24, [](const Operand* x, const Operand* y){ return new Double(x->value()*y->value()); }),
+  Operator("/", 32, [](const Operand* x, const Operand* y){ return new Double(x->value()/y->value()); }),
+  /* Assignment operator */
+  Operator("=", 0, [](const Operand* lhs, const Operand* rhs){ 
+    auto var = dynamic_cast<const Variable*>(lhs);
+    if(!var) { throw std::invalid_argument("Left hand side of assignment operator (" + lhs->str() + ") must be a variable."); }
+    var->set(rhs);
+    return new Double(rhs->value());
+  })
 };
-
-
-// bool Operator::is_operator(std::string op) { return map.find(op) != map.end(); }
-
 
 
 Operator::Operator(): Token("") {}
 
 
-Operator::Operator(std::string str, int priority, std::function<double(double, double)> apply)
+Operator::Operator(std::string str, int priority, std::function<Operand*(const Operand*, const Operand*)> apply)
 : Token(str), m_priority(priority), m_apply(apply) {}
 
 
@@ -39,8 +42,8 @@ bool Operator::operator<=(const Operator& other) { return *this < other || *this
 bool Operator::operator>=(const Operator& other) { return *this > other || *this == other; }
 
 
-Operand Operator::operator()(const Operand& operand1, const Operand& operand2) {
-  return Operand(m_apply(operand1.value(), operand2.value()));
+Operand* Operator::operator()(const Operand* operand1, const Operand* operand2) {
+  return m_apply(operand1, operand2);
 }
 
 

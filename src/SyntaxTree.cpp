@@ -19,8 +19,17 @@ SyntaxTree::SyntaxTree(std::string str): BTree(NULL), m_result(0) {
       break;
     }
   }
-  // If no operator was found, create tree node as operand
-  if(!is_operator) data = new Operand(str);
+
+  if(!is_operator) {
+    try{
+      // If no operator was found, try to create tree node as double
+      data = new Double(str);
+    } catch(const std::invalid_argument& error) {
+      // If it is not a double, initialize it as a variable
+      data = new Variable(str);
+    }
+  }
+  
   // Parse tree
   parse();
 }
@@ -30,17 +39,21 @@ SyntaxTree::SyntaxTree(const SyntaxTree& other): BTree<Token*>(other), m_result(
 
 SyntaxTree::SyntaxTree(SyntaxTree&& other): BTree<Token*>(std::move(other)), m_result(std::move(m_result)) {}
 
+SyntaxTree::~SyntaxTree() { delete m_result; /* left and right destroyed in BTree destructor */ }
 
-Operand SyntaxTree::parse() {
+
+Operand* SyntaxTree::parse() {
   // Base case: operand node
   if (auto operand = dynamic_cast<Operand*>(data)) 
-    return m_result = *operand;
+    return m_result = operand;
   
+  // If it is not an operand node, it is an operator node
   auto l_tree = static_cast<SyntaxTree*>(left);
   auto r_tree = static_cast<SyntaxTree*>(right);
   auto op = *static_cast<Operator*>(data);
 
-  return m_result = op(l_tree->result().value(),r_tree->result().value());
+  // Recursive calculation
+  return m_result = op(l_tree->parse(),r_tree->parse());
 }
 
 
@@ -82,7 +95,7 @@ bool SyntaxTree::is_wrapped(std::string str) {
 }
 
 
-bool SyntaxTree::validate_str(std::string str) {
+void SyntaxTree::validate_str(std::string str) {
   // Validate parentheses
   int open_pars = 0;
   for (const auto& ch : str) {
@@ -93,5 +106,4 @@ bool SyntaxTree::validate_str(std::string str) {
   }
   // Check for unclosed parentheses
   if (open_pars > 0) throw std::invalid_argument("Unclosed parentheses.");
-  return true;
 }

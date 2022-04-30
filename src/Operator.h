@@ -11,15 +11,14 @@
 class Operator: public Token {
   private:
     int m_priority;
-    std::function<double(double, double)> m_apply;
+    std::function<Operand*(const Operand*, const Operand*)> m_apply;
   public:
     static std::set<Operator> set;
-    // static bool is_operator(std::string op);
     inline int priority() const { return m_priority; }
     Operator();
     Operator(const Operator& other);
     Operator(const Operator&& other);
-    Operator(std::string str, int priority, std::function<double(double, double)> apply);
+    Operator(std::string str, int priority, std::function<Operand*(const Operand*, const Operand*)> apply);
     /* Copy and move assignments */
     Operator operator=(const Operator& other);
     Operator operator=(const Operator&& other);
@@ -31,7 +30,7 @@ class Operator: public Token {
     bool operator<=(const Operator& other);
     bool operator>=(const Operator& other);
     /* Return new Operand, result of the operation on two Operand inputs */
-    Operand operator()(const Operand& operand1, const Operand& operand2);
+    Operand* operator()(const Operand* operand1, const Operand* operand2);
 };
 
 /* Sorting struct to allow construction of sets (and other STL containers) of Operator objects */
