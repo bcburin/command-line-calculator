@@ -1,17 +1,20 @@
 #include "Operator.h"
+#include "OperatorDefinitions.h"
 
 std::set<Operator> Operator::set = {
-  Operator("+", 8, [](const Operand* x, const Operand* y){ return new Double(x->value()+y->value()); }),
-  Operator("-", 16, [](const Operand* x, const Operand* y){ return new Double(x->value()-y->value()); }),
-  Operator("*", 24, [](const Operand* x, const Operand* y){ return new Double(x->value()*y->value()); }),
-  Operator("/", 32, [](const Operand* x, const Operand* y){ return new Double(x->value()/y->value()); }),
-  /* Assignment operator */
-  Operator("=", 0, [](const Operand* lhs, const Operand* rhs){ 
-    auto var = dynamic_cast<const Variable*>(lhs);
-    if(!var) { throw std::invalid_argument("Left hand side of assignment operator (" + lhs->str() + ") must be a variable."); }
-    var->set(rhs);
-    return new Double(rhs->value());
-  })
+  Operator("=", 7, __assing__),
+  Operator("+", 8, __sum__),
+  Operator("-", 16, __sub__),
+  Operator("*", 24, __mul__),
+  Operator("%", 30, __mod__),
+  Operator("//", 31, __trunc__),
+  Operator("/", 32, __div__),
+  Operator("^", 40, __pow__),
+  Operator("+=", 0, __assing_sum__),
+  Operator("-=", 1, __assing_sub__),
+  Operator("*=", 2, __assing_mul__),
+  Operator("/=", 3, __assing_div__),
+  Operator("^=", 4, __assing_pow__)
 };
 
 
