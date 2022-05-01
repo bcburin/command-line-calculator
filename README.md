@@ -151,3 +151,9 @@ The variable `_` is always available (does not have to be created) and stores th
 >> c
    30
 ```
+
+The program can be exited at any time with the `exit()` command:
+
+```
+>> exit()
+```
