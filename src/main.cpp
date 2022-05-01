@@ -12,7 +12,11 @@ int main(int argc, char **argv) {
 
   string input;
 
-  Variable::add("PI", 3.1415);
+  // Define starting variables
+  Variable::add("PI", 3.14159);
+  Variable::add("E", 2.71828);
+  // Define variable to hold last result
+  Variable::add("_",0);
 
   while(true) { 
     bool show_output = true;
@@ -25,10 +29,14 @@ int main(int argc, char **argv) {
     }
 
     if(input == "exit()") break;
-
-    SyntaxTree stree(input);
-
-    if(show_output) cout << "   " <<  stree.result()->value() << endl;
+    
+    try{ 
+      SyntaxTree stree(input); 
+      Variable::add("_", stree.result());
+      if(show_output) cout << "   " <<  stree.result() << endl;
+    } catch(const std::invalid_argument& error) { 
+      cout << "   " << error.what() << endl;
+    }
 
   }
 
