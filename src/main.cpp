@@ -23,6 +23,8 @@ int main(int argc, char **argv) {
     cout << ">> ";
     std::getline(std::cin, input);
 
+    if(input == "") continue;
+
     if(input.back() == ';') {
       input = input.substr(0, input.size()-1);
       show_output = false;
