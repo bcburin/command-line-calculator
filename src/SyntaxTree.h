@@ -16,8 +16,8 @@ class SyntaxTree: protected BTree<Token*> {
     SyntaxTree(const SyntaxTree& other);
     SyntaxTree(SyntaxTree&& other);
     ~SyntaxTree();
-    inline Operand* result() const { return m_result; }
-
+    inline double result() const { return m_result->value(); }
+    inline bool is_empty() const { return data == nullptr; }
   private:
     /* ----- PRIVATE UTILITY METHODS ----- */
 

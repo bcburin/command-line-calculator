@@ -1,9 +1,11 @@
 #include "SyntaxTree.h"
 #include <exception>
 
-SyntaxTree::SyntaxTree(std::string str): BTree(NULL), m_result(0) {
+SyntaxTree::SyntaxTree(std::string str): BTree(nullptr), m_result(nullptr) {
   // Trim string
   str = trim(str);
+  // Check for empty expression
+  if (str == "") return;
   // Validate input
   validate_str(str);
   // Check if string is wrapped by a pair of parentheses; remove them if affirmative; repeat until not wrapped
@@ -17,7 +19,7 @@ SyntaxTree::SyntaxTree(std::string str): BTree(NULL), m_result(0) {
       // Create tree node containg the op
       data = new Operator(op);
       left = new SyntaxTree(str.substr(0,index));
-      right = new SyntaxTree(str.substr(index+1,str.size()-index-1));
+      right = new SyntaxTree(str.substr(index+op.str().size(),str.size()-index-op.str().size()));
       break;
     }
   }
@@ -48,6 +50,9 @@ Operand* SyntaxTree::parse() {
   // Base case: operand node
   if (auto operand = dynamic_cast<Operand*>(data)) 
     return m_result = operand;
+
+  // Base case: empty tree
+  if(is_empty()) return nullptr;
   
   // If it is not an operand node, it is an operator node
   auto l_tree = static_cast<SyntaxTree*>(left);
