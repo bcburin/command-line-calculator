@@ -60,7 +60,7 @@ Operand* SyntaxTree::parse() {
   auto op = *static_cast<Operator*>(data);
 
   // Recursive calculation
-  return m_result = op(l_tree->parse(),r_tree->parse());
+  return m_result = op(l_tree->m_result,r_tree->m_result);
 }
 
 
