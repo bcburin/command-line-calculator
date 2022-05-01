@@ -2,21 +2,27 @@
 #include "OperatorDefinitions.h"
 
 std::set<Operator> Operator::set = {
-  Operator("=", 7, __assing__),
-  Operator("+", 8, __sum__),
-  Operator("-", 16, __sub__),
-  Operator("*", 24, __mul__),
-  Operator("%", 30, __mod__),
-  Operator("//", 31, __trunc__),
-  Operator("/", 32, __div__),
-  Operator("^", 40, __pow__),
-  Operator("+=", 0, __assign_sum__),
-  Operator("-=", 1, __assign_sub__),
-  Operator("*=", 2, __assign_mul__),
-  Operator("%=", 3, __assign_mod__),
-  Operator("//=", 4, __assign_trunc__),
-  Operator("/=", 5, __assign_div__),
-  Operator("^=", 6, __assign_pow__)
+  Operator("==", 0, __eq__),
+  Operator("!=", 1, __ne__),
+  Operator(">", 2, __gt__),
+  Operator("<", 3, __lt__),
+  Operator(">=", 4, __ge__),
+  Operator("<=", 5, __le__),
+  Operator("+=", 8, __assign_sum__),
+  Operator("-=", 9, __assign_sub__),
+  Operator("*=", 10, __assign_mul__),
+  Operator("%=", 11, __assign_mod__),
+  Operator("//=", 12, __assign_trunc__),
+  Operator("/=", 13, __assign_div__),
+  Operator("^=", 14, __assign_pow__),
+  Operator("=", 16, __assing__),
+  Operator("+", 24, __sum__),
+  Operator("-", 32, __sub__),
+  Operator("*", 40, __mul__),
+  Operator("%", 46, __mod__),
+  Operator("//", 47, __trunc__),
+  Operator("/", 48, __div__),
+  Operator("^", 56, __pow__)
 };
 
 

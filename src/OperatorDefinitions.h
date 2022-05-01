@@ -29,7 +29,7 @@ operator_function __mul__ = [](const Operand* x, const Operand* y){
 operator_function __div__ = [](const Operand* x, const Operand* y){ 
   if(!y) throw std::invalid_argument("Expected expression after / operator.");
   if(!x) throw std::invalid_argument("Expected expression before / operator.");
-  if(y->value() == 0) throw std::invalid_argument("Division by zero");
+  if(y->value() == 0) throw std::invalid_argument("Division by zero.");
   return new Double(x->value()/y->value()); 
 };
 
@@ -52,6 +52,42 @@ operator_function __pow__ = [](const Operand* x, const Operand* y){
   if(!x) throw std::invalid_argument("Expected expression before ^ operator.");
   if(x->value() == 0 && y->value() == 0) throw std::invalid_argument("Power 0^0 undefined.");
   return new Double(std::pow(x->value(),y->value()));
+};
+
+operator_function __eq__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after == operator.");
+  if(!x) throw std::invalid_argument("Expected expression before == operator.");
+  return new Double(x->value() == y->value());
+};
+
+operator_function __ne__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after != operator.");
+  if(!x) throw std::invalid_argument("Expected expression before != operator.");
+  return new Double(x->value() != y->value());
+};
+
+operator_function __gt__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after > operator.");
+  if(!x) throw std::invalid_argument("Expected expression before > operator.");
+  return new Double(x->value() > y->value());
+};
+
+operator_function __lt__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after < operator.");
+  if(!x) throw std::invalid_argument("Expected expression before < operator.");
+  return new Double(x->value() < y->value());
+};
+
+operator_function __ge__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after >= operator.");
+  if(!x) throw std::invalid_argument("Expected expression before >= operator.");
+  return new Double(x->value() >= y->value());
+};
+
+operator_function __le__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after <= operator.");
+  if(!x) throw std::invalid_argument("Expected expression before <= operator.");
+  return new Double(x->value() <= y->value());
 };
 
 operator_function __assing__ = [](const Operand* lhs, const Operand* rhs){ 
