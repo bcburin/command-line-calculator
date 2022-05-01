@@ -10,11 +10,13 @@ std::set<Operator> Operator::set = {
   Operator("//", 31, __trunc__),
   Operator("/", 32, __div__),
   Operator("^", 40, __pow__),
-  Operator("+=", 0, __assing_sum__),
-  Operator("-=", 1, __assing_sub__),
-  Operator("*=", 2, __assing_mul__),
-  Operator("/=", 3, __assing_div__),
-  Operator("^=", 4, __assing_pow__)
+  Operator("+=", 0, __assign_sum__),
+  Operator("-=", 1, __assign_sub__),
+  Operator("*=", 2, __assign_mul__),
+  Operator("%=", 3, __assign_mod__),
+  Operator("//=", 4, __assign_trunc__),
+  Operator("/=", 5, __assign_div__),
+  Operator("^=", 6, __assign_pow__)
 };
 
 

@@ -82,14 +82,18 @@ operator_function operator_assign(std::string op_name, operator_function& __op__
   };
 }
 
-operator_function __assing_sum__ = operator_assign("+=", __sum__);
+operator_function __assign_sum__ = operator_assign("+=", __sum__);
 
-operator_function __assing_sub__ = operator_assign("-=", __sub__);
+operator_function __assign_sub__ = operator_assign("-=", __sub__);
 
-operator_function __assing_mul__ = operator_assign("*=", __mul__);
+operator_function __assign_mul__ = operator_assign("*=", __mul__);
 
-operator_function __assing_div__ = operator_assign("/=", __div__);
+operator_function __assign_div__ = operator_assign("/=", __div__);
 
-operator_function __assing_pow__ = operator_assign("/=", __pow__);
+operator_function __assign_pow__ = operator_assign("/=", __pow__);
+
+operator_function __assign_mod__ = operator_assign("%=", __mod__);
+
+operator_function __assign_trunc__ = operator_assign("//=", __trunc__);
 
 #endif
