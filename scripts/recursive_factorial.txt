@@ -1,0 +1,14 @@
+base_case = 0
+final = 1
+
+if n == 1
+  base_case = 1
+  factorial = 1
+end
+
+if base_case == 0
+  run recursive_factorial: n -= 1
+  n += 1
+  factorial *= n 
+end
+

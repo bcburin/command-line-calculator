@@ -1,0 +1,9 @@
+is_prime = 1
+
+for i = 2, i < n, i += 1
+  if n % i == 0
+    is_prime = 0
+  end
+end
+
+delete n

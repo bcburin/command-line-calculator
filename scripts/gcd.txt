@@ -1,0 +1,12 @@
+
+while n != 0
+  t = n
+  n = m % n
+  m = t
+end
+
+gcd = m
+
+delete m
+delete n
+delete t
