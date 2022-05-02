@@ -25,12 +25,12 @@ Operand* Double::clone() const  { return new Double(*this); }
 Variable::Variable(std::string name): Operand(name) {
   // Variable name must start with letter or _ character
   if (!isalpha(name[0]) && name[0] != '_') 
-    throw std::invalid_argument("Invalid variable name: must start with a letter or _ character.");
+    throw std::invalid_argument("Invalid variable name: '" + name + "' (must start with a letter or _ character).");
   
   // Variable name must be made up by letters, numbers or the _ character
   for (const auto& ch : name)
     if(!isalnum(ch) && ch != '_')
-      throw std::invalid_argument("Invalid variable name: must contain letters, numbers or the _ character only.");
+      throw std::invalid_argument("Invalid variable name: '" + name + "' (must contain letters, numbers or the _ character only).");
 }
 
 double Variable::value() const {
