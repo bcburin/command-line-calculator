@@ -1,6 +1,7 @@
 #include "Statement.h"
 #include "SyntaxTree.h"
 #include "Helpers.h"
+#include "Interface.h"
 
 /* STATEMENT */
 
@@ -24,6 +25,42 @@ double Expression::evaluate(std::string str) {
 DeleteStatement::DeleteStatement(std::string str): Statement(str), m_variable(str.substr(7)) {}
 
 void DeleteStatement::execute() { Variable::remove(m_variable); }
+
+/* RUN STATEMENT */
+
+RunStatement::RunStatement(std::string str): Statement(str), arguments() {
+  int index = str.find(":");
+  if (index==std::string::npos) {
+    // If ":" was not found in statement
+    filename = trim(str.substr(4));
+  } else {
+    // Get filename between "run" and ":"
+    filename = trim(str.substr(4,index-4));
+    // Delete string before ":" (inclusive)
+    str = str.substr(index+1);
+    // Get arguments
+    while ( (index = str.find(",")) != std::string::npos) {
+      arguments.push_back( str.substr(0,index) );
+      str = str.substr(index+1);
+    }
+    // Get last argument
+    arguments.push_back(str);
+  }
+  filename = "scripts/" + filename + ".txt";
+}
+
+void RunStatement::execute() {
+  std::ifstream script(filename);
+  if(!script.is_open()) throw std::invalid_argument("No such file: '" + filename + "'");
+  // Execute arguments
+  for (const auto& arg : arguments) { 
+    if(trim(arg)!="") Expression::evaluate(arg);
+  }
+  // Read and execute script
+  read_statemets(&script, nullptr, true, true);
+  // Close file
+  script.close();
+}
 
 
 /* MULTILINE STATEMENT */

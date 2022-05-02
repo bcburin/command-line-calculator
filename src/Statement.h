@@ -31,6 +31,15 @@ class DeleteStatement: public Statement {
     void execute() override;
 };
 
+class RunStatement: public Statement {
+  private:
+    std::string filename;
+    std::vector<std::string> arguments;
+  public:
+    RunStatement(std::string str);
+    void execute() override;
+};
+
 class MultilineStatement: public Statement {
   private:
     std::vector<Statement*> m_nested_statements;
