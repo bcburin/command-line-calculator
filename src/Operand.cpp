@@ -42,7 +42,7 @@ void Variable::set(const Operand* op) const { storage[name()] = op->clone(); }
 
 bool Variable::is_in_storage(const std::string& name) { return storage.find(name) != storage.end(); }
 
-Operand* Variable::clone() const  { return new Variable(*this); }
+Operand* Variable::clone() const  { return new Double(this->value()); }
 
 std::unordered_map<std::string, Operand*> Variable::storage = {};
 
