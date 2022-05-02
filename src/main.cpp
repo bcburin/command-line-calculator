@@ -45,7 +45,7 @@ std::vector<Statement*> read_statemets(std::istream* is, std::ostream* os,  bool
   // If an ostream was given, output the '>>'  indicator
   if(os) *os << ">> ";
   // Read input from istream until reaching eof or specified "end" line
-  while ( std::getline(*is, line) && line != "end" ) {
+  while ( std::getline(*is, line) && trim(line) != "end" ) {
     // Trim line
     line = trim(line);
     // Check for trailing semicolon and set whether to display result
