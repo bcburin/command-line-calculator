@@ -2,6 +2,8 @@
 #include "OperatorDefinitions.h"
 
 std::set<Operator> Operator::set = {
+  Operator("||", -7, __or__),
+  Operator("&&", -6, __and__),
   Operator("==", 0, __eq__),
   Operator("!=", 1, __ne__),
   Operator(">", 2, __gt__),

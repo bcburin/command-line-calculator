@@ -90,6 +90,19 @@ operator_function __le__ = [](const Operand* x, const Operand* y){
   return new Double(x->value() <= y->value());
 };
 
+operator_function __and__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after && operator.");
+  if(!x) throw std::invalid_argument("Expected expression before && operator.");
+  return new Double(x->value() && y->value());
+};
+
+operator_function __or__ = [](const Operand* x, const Operand* y){ 
+  if(!y) throw std::invalid_argument("Expected expression after || operator.");
+  if(!x) throw std::invalid_argument("Expected expression before || operator.");
+  return new Double(x->value() || y->value());
+};
+
+
 operator_function __assing__ = [](const Operand* lhs, const Operand* rhs){ 
   if(!rhs) throw std::invalid_argument("Expected expression after = operator.");
   if(!lhs) throw std::invalid_argument("Expected variable before = operator.");
