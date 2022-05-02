@@ -16,8 +16,10 @@ class Statement {
 class Expression: public Statement {
   private:
     double m_result;
+    bool run_mode;
+    std::ostream* os;
   public:
-    Expression(std::string str);
+    Expression(std::string str, std::ostream* os = nullptr, bool run_mode = false);
     double result() { return m_result; }
     void execute() override;
     static double evaluate(std::string str);
@@ -37,6 +39,15 @@ class RunStatement: public Statement {
     std::vector<std::string> arguments;
   public:
     RunStatement(std::string str);
+    void execute() override;
+};
+
+class PrintStatement: public Statement {
+  private:
+    std::string expression;
+    std::ostream* os;
+  public:
+    PrintStatement(std::string str, std::ostream* os);
     void execute() override;
 };
 

@@ -10,9 +10,24 @@ Statement::Statement(std::string str): m_str(str) {}
 
 /* EXPRESSION */
 
-Expression::Expression(std::string str): Statement(str), m_result(0) {}
+Expression::Expression(std::string str, std::ostream* os, bool run_mode)
+: Statement(str), m_result(0), os(os), run_mode(run_mode) {}
 
-void Expression::execute() {  m_result = evaluate(str()); }
+void Expression::execute() {
+  bool display_result = true;
+  std::string str = Expression::str();
+  // Check for trailing semicolon and set whether to display result
+  if(str.back()==';') {
+    str = str.substr(0,str.size()-1);
+    display_result = false;
+  }
+  // Parse string
+  m_result = evaluate(str);
+  // Add result to global variable "_" 
+  if(os) Variable::add("_", m_result);
+  // Display result
+  if(os && run_mode && display_result) *os << "   " << m_result << std::endl;
+}
 
 double Expression::evaluate(std::string str) {
   SyntaxTree stree(str);
@@ -60,6 +75,16 @@ void RunStatement::execute() {
   read_statemets(&script, nullptr, true, true);
   // Close file
   script.close();
+}
+
+
+/* PRINT STATEMENT */
+
+PrintStatement::PrintStatement(std::string str, std::ostream* os)
+: Statement(str), expression(str.substr(6)), os(os) {}
+
+void PrintStatement::execute() { 
+  if(os) *os << "   " << Expression::evaluate(expression) << std::endl;
 }
 
 
