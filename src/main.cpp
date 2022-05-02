@@ -37,16 +37,18 @@ std::vector<Statement*> read_statemets(std::istream* is, std::ostream* os,  bool
   // Read input from istream until reaching eof or specified "end" line
   while ( std::getline(*is, line) && trim(line) != "end" ) {
     try {
+      bool display_result = true;
       // Trim line
       line = trim(line);
+      // Check for null input
+      if (line == "") {}
       // Check for trailing semicolon and set whether to display result
-      bool display_result = true;
-      if(line.back()==';') {
+      else if(line.back()==';') {
         line = line.substr(0,line.size()-1);
         display_result = false;
       }
       // Check for if statement
-      if(line.find("if ")==0) {
+      else if(line.find("if ")==0) {
         // Read nested statements
         std::vector<Statement*> nested_statements = read_statemets(is, os, false);
         // Create IfStatement object
@@ -55,9 +57,9 @@ std::vector<Statement*> read_statemets(std::istream* is, std::ostream* os,  bool
         if (run) statement->execute();
         // Save statement if not in run mode
         if (!run) statement_list.push_back(statement);
-      } else 
+      } 
       // Check for while statement
-      if(line.find("while ")==0) {
+      else if(line.find("while ")==0) {
         // Read nested statements
         std::vector<Statement*> nested_statements = read_statemets(is, os, false);
         // Create WhileStatement object
@@ -66,9 +68,9 @@ std::vector<Statement*> read_statemets(std::istream* is, std::ostream* os,  bool
         if (run) statement->execute();
         // Save statement if not in run mode
         if (!run) statement_list.push_back(statement);
-      } else 
+      }
       // Check for "for" operator
-      if(line.find("for ")==0) {
+      else if(line.find("for ")==0) {
         // Read nested statements
         std::vector<Statement*> nested_statements = read_statemets(is, os, false);
         // Create ForStatement object
@@ -77,18 +79,18 @@ std::vector<Statement*> read_statemets(std::istream* is, std::ostream* os,  bool
         if (run) statement->execute();
         // Save statement if not in run mode
         if (!run) statement_list.push_back(statement);
-      } else
+      }
       // Check for delete statement
-      if(line.find("delete ")==0) {
+      else if(line.find("delete ")==0) {
         // Create object
         auto statement = new DeleteStatement(line);
         // Execute if in run mode
         if (run) statement->execute();
         // Save statement if not in run mode
         if (!run) statement_list.push_back(statement);
-      } else
+      }
       // In the default case, the statement is interpreted as expression
-      {
+      else {
         auto exp = new Expression(line);
         statement_list.push_back(exp);
         // If in run mode, evaluate expression and output result in the given ostream
