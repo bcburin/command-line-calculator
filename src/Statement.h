@@ -23,6 +23,14 @@ class Expression: public Statement {
     static double evaluate(std::string str);
 };
 
+class DeleteStatement: public Statement {
+  private:
+    std::string m_variable;
+  public:
+    DeleteStatement(std::string str);
+    void execute() override;
+};
+
 class MultilineStatement: public Statement {
   private:
     std::vector<Statement*> m_nested_statements;

@@ -19,6 +19,13 @@ double Expression::evaluate(std::string str) {
 }
 
 
+/* DELETE STATEMENT */
+
+DeleteStatement::DeleteStatement(std::string str): Statement(str), m_variable(str.substr(7)) {}
+
+void DeleteStatement::execute() { Variable::remove(m_variable); }
+
+
 /* MULTILINE STATEMENT */
 
 MultilineStatement::MultilineStatement(std::string str, std::vector<Statement*> nested_statements)

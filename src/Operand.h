@@ -43,13 +43,14 @@ class Variable: public Operand {
     Operand* clone() const override;
     /* Empties static storage */
     static void empty_storage();
-    /* Adds a variable to the storage at compile-time */
+    /* Add and remove variables to the storage */
     static void add(std::string name, double value);
+    static void remove(std::string name);
   private:
     /* Stores variable values */
     static std::unordered_map<std::string, Operand*> storage;
     /* Checks if variable is in the storage */
-    bool is_in_storage(const std::string& name) const;
+    static bool is_in_storage(const std::string& name);
 };
 
 

@@ -40,18 +40,27 @@ double Variable::value() const {
 
 void Variable::set(const Operand* op) const { storage[name()] = op->clone(); }
 
-bool Variable::is_in_storage(const std::string& name) const { return storage.find(name) != storage.end(); }
+bool Variable::is_in_storage(const std::string& name) { return storage.find(name) != storage.end(); }
 
 Operand* Variable::clone() const  { return new Variable(*this); }
 
 std::unordered_map<std::string, Operand*> Variable::storage = {};
 
-void Variable::empty_storage() { storage.clear(); }
+void Variable::empty_storage() { 
+  for (const auto& pair : storage) delete pair.second;
+  storage.clear(); 
+}
 
 void Variable::add(std::string name, double value) {
   Double val(value);
   Variable var(name);
   var.set(&val);
+}
+
+void Variable::remove(std::string name) {
+  if (!is_in_storage(name)) throw std::invalid_argument("Undefined variable: '" + name + "'");
+  delete storage[name];
+  storage.erase(name);
 }
 
 

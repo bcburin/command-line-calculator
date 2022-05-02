@@ -87,6 +87,15 @@ std::vector<Statement*> read_statemets(std::istream* is, std::ostream* os,  bool
       // Save statement if not in run mode
       if (!run) statement_list.push_back(statement);
     } else
+    // Check for delete statement
+    if(line.find("delete ")==0) {
+      // Create object
+      auto statement = new DeleteStatement(line);
+      // Execute if in run mode
+      if (run) statement->execute();
+      // Save statement if not in run mode
+      if (!run) statement_list.push_back(statement);
+    } else
     // In the default case, the statement is interpreted as expression
     {
       auto exp = new Expression(line);
